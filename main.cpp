@@ -55,6 +55,38 @@ void troca(int* a, int* b){
     *b = tmp;
 }
 
+//Algoritimo Selection Sort
+void selectionSort(int* vetor, int n_elem){
+    int menor;
+    for(int i=0;i<(n_elem-1);i++){
+        //buscando o menor valor apartir de i
+        menor = i;
+        for(int j=i+2;j<n_elem;j++)
+            if(vetor[j]<vetor[menor])
+                menor = j;
+        //fixa valor na posicao i
+        troca(&vetor[i], &vetor[menor]);
+    }
+}
+
+//Algoritimo Insertion Sort
+void insertionSort(int* vetor, int n_elem){
+    int local;
+    for(int i=1;i<n_elem;i++){
+        //procura o local apropriado para o valor i
+        local = 0;
+        for(int j=0;j<i;j++)
+            if(vetor[j]<vetor[i])
+                local++;
+        //deslocando valores para frete, para por o valor i no local local
+        int tmp = vetor[i];
+        for(int j=i;j>local;j--)
+            vetor[j]=vetor[j-1];
+        //fixo valor em i no seu lugar apropriado
+        vetor[local] = tmp;
+    }
+}
+
 //Algoritimo Bubble Sort
 void bubbleSort(int* vetor, int n_elem){
     for(int i=0;i<n_elem;i++)
@@ -89,32 +121,40 @@ void quickSort(int* vetor, int n_elem){
 
 int main()
 {
-    int *vetor, *bubble_vet, *quick_vet;
+    int *vetor, *bubble_vet, *quick_vet, *select_vet, *insert_vet;
 
     //criando vetores de teste iguais
     vetor = criaVetor(SIZE, MIN, MAX);
     bubble_vet = copiaVetor(vetor, SIZE);
     quick_vet = copiaVetor(vetor, SIZE);
+    select_vet = copiaVetor(vetor, SIZE);
+    insert_vet = copiaVetor(vetor, SIZE);
 
     //rodando os algoritimos
     bubbleSort(bubble_vet, SIZE);
     quickSort(quick_vet, SIZE);
+    selectionSort(select_vet,SIZE);
+    insertionSort(insert_vet,SIZE);
 
     //verificando se deu tudo certo
     if(isOrderly(bubble_vet,SIZE)){
-        if(isEqual(bubble_vet,quick_vet,SIZE))
+        if(!isEqual(bubble_vet,quick_vet,SIZE));
+        else if(!isEqual(quick_vet,select_vet,SIZE));
+        else if(!isEqual(select_vet,insert_vet,SIZE));
+        else//todos os vetores são iguais
             cout << "  Ordenacao concluida com exito para todos os algoritimos!" << endl;
     }
 
     //imprimindo resultados
     imprime(vetor, SIZE);
     imprime(bubble_vet, SIZE);
-    imprime(quick_vet, SIZE);
 
     //desalocando memoria
     delete [] vetor;
     delete [] bubble_vet;
     delete [] quick_vet;
+    delete [] select_vet;
+    delete [] insert_vet;
 
     return 0;
 }
