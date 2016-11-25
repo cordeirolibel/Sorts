@@ -134,10 +134,46 @@ void quickSort(int* vetor, int n_elem){
     quickSort(vetor+i+2,n_elem-i-2);
 }
 
+//Algoritimo Merge Sort
+void mergeSort(int* vetor, int n_elem){
+    if(n_elem == 1)
+        return;
+
+    int n_elem_a = n_elem/2;
+
+    mergeSort(vetor,n_elem_a); //primeiro bloco [0,n_elem_a-1]
+    mergeSort(vetor+n_elem_a,n_elem-n_elem_a); //segundo bloco [n_elem_a,n_elem-1]
+
+    int vet_tmp[n_elem];
+    int i1=0, i2=n_elem_a;//indices de cada grupo
+
+    for(int i=0;i<n_elem;i++){
+        if(i1==n_elem_a){//bloco 1 ja acabou
+            vet_tmp[i] = vetor[i2];
+            i2++;
+        }
+        else if(i2==n_elem){//bloco 2 ja acabou
+            vet_tmp[i] = vetor[i1];
+            i1++;
+        }
+        else if(vetor[i1]<vetor[i2]){//valor do bloco 1 eh menor
+            vet_tmp[i] = vetor[i1];
+            i1++;
+        }
+        else{//valor do bloco 2 eh menor
+            vet_tmp[i] = vetor[i2];
+            i2++;
+        }
+    }
+
+    //copia todo vetor
+    for(int i=0;i<n_elem;i++)
+        vetor[i] = vet_tmp[i];
+}
 
 int main()
 {
-    int *vetor, *select_vet, *insert_vet, *bubble_vet, *shell_vet, *quick_vet;
+    int *vetor,*select_vet,*insert_vet,*bubble_vet,*shell_vet,*quick_vet,*merge_vet;
 
     //criando vetores de teste iguais
     vetor = criaVetor(SIZE, MIN, MAX);
@@ -146,13 +182,15 @@ int main()
     bubble_vet = copiaVetor(vetor, SIZE);
     shell_vet = copiaVetor(vetor, SIZE);
     quick_vet = copiaVetor(vetor, SIZE);
+    merge_vet = copiaVetor(vetor, SIZE);
 
     //rodando os algoritimos
-    selectionSort(select_vet,SIZE);
-    insertionSort(insert_vet,SIZE);
+    selectionSort(select_vet, SIZE);
+    insertionSort(insert_vet, SIZE);
     bubbleSort(bubble_vet, SIZE);
-    shellSort(shell_vet,SIZE);
+    shellSort(shell_vet, SIZE);
     quickSort(quick_vet, SIZE);
+    mergeSort(merge_vet, SIZE);
 
     //verificando se deu tudo certo
     if(isOrderly(bubble_vet,SIZE)){
@@ -160,13 +198,14 @@ int main()
         else if(!isEqual(insert_vet,bubble_vet,SIZE));
         else if(!isEqual(bubble_vet,shell_vet,SIZE));
         else if(!isEqual(shell_vet,quick_vet,SIZE));
+        else if(!isEqual(quick_vet,merge_vet,SIZE));
         else//todos os vetores são iguais
             cout << "  Ordenacao concluida com exito para todos os algoritimos!" << endl;
     }
 
     //imprimindo resultados
     imprime(vetor, SIZE);
-    imprime(shell_vet, SIZE);
+    imprime(bubble_vet, SIZE);
 
     //desalocando memoria
     delete [] vetor;
@@ -175,6 +214,7 @@ int main()
     delete [] bubble_vet;
     delete [] shell_vet;
     delete [] quick_vet;
+    delete [] merge_vet;
 
     return 0;
 }
