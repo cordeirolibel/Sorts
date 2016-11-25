@@ -9,3 +9,5 @@ Algoritimos:
 	Selection Sort
 
 	Insertion Sort
+
+	Shell Sort

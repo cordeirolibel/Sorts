@@ -86,6 +86,22 @@ void insertionSort(int* vetor, int n_elem){
         vetor[local] = tmp;
     }
 }
+//Algoritimo Shell Sort
+void shellSort(int* vetor, int n_elem, int pula = -1){
+    bool flag = false;//indica mudança
+    if(pula == -1)//primeira interacao
+        pula = n_elem/2;
+    for(int i=0;(i+pula)<n_elem;i++)
+        if(vetor[i]>vetor[i+pula]){
+            troca(&vetor[i],&vetor[i+pula]);
+            flag = true;
+        }
+    if(flag)//se ocorreu mudaca repete
+        shellSort(vetor,n_elem,pula);
+    //repita ate janela pular igual 1, isto é valores proximos
+    else if(pula != 1)
+        shellSort(vetor,n_elem,(pula+1)/2);
+}
 
 //Algoritimo Bubble Sort
 void bubbleSort(int* vetor, int n_elem){
@@ -121,40 +137,44 @@ void quickSort(int* vetor, int n_elem){
 
 int main()
 {
-    int *vetor, *bubble_vet, *quick_vet, *select_vet, *insert_vet;
+    int *vetor, *select_vet, *insert_vet, *bubble_vet, *shell_vet, *quick_vet;
 
     //criando vetores de teste iguais
     vetor = criaVetor(SIZE, MIN, MAX);
-    bubble_vet = copiaVetor(vetor, SIZE);
-    quick_vet = copiaVetor(vetor, SIZE);
     select_vet = copiaVetor(vetor, SIZE);
     insert_vet = copiaVetor(vetor, SIZE);
+    bubble_vet = copiaVetor(vetor, SIZE);
+    shell_vet = copiaVetor(vetor, SIZE);
+    quick_vet = copiaVetor(vetor, SIZE);
 
     //rodando os algoritimos
-    bubbleSort(bubble_vet, SIZE);
-    quickSort(quick_vet, SIZE);
     selectionSort(select_vet,SIZE);
     insertionSort(insert_vet,SIZE);
+    bubbleSort(bubble_vet, SIZE);
+    shellSort(shell_vet,SIZE);
+    quickSort(quick_vet, SIZE);
 
     //verificando se deu tudo certo
     if(isOrderly(bubble_vet,SIZE)){
-        if(!isEqual(bubble_vet,quick_vet,SIZE));
-        else if(!isEqual(quick_vet,select_vet,SIZE));
-        else if(!isEqual(select_vet,insert_vet,SIZE));
+        if(!isEqual(select_vet,insert_vet,SIZE));
+        else if(!isEqual(insert_vet,bubble_vet,SIZE));
+        else if(!isEqual(bubble_vet,shell_vet,SIZE));
+        else if(!isEqual(shell_vet,quick_vet,SIZE));
         else//todos os vetores são iguais
             cout << "  Ordenacao concluida com exito para todos os algoritimos!" << endl;
     }
 
     //imprimindo resultados
     imprime(vetor, SIZE);
-    imprime(bubble_vet, SIZE);
+    imprime(shell_vet, SIZE);
 
     //desalocando memoria
     delete [] vetor;
-    delete [] bubble_vet;
-    delete [] quick_vet;
     delete [] select_vet;
     delete [] insert_vet;
+    delete [] bubble_vet;
+    delete [] shell_vet;
+    delete [] quick_vet;
 
     return 0;
 }
